@@ -260,7 +260,7 @@
 			</section>
 
 			<section class="row pt-header" id="step4" v-if="Designed">
-				<form class="d-none">
+				<form class="d-none" action="lk">
           {% for level in vue_data.DATA.Levels %}
           {% if not forloop.first %}
             <input v-model="Levels" value="{{ forloop.counter0 }}" type="radio" name="LEVELS">

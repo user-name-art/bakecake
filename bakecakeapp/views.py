@@ -26,3 +26,56 @@ def index(request):
         }
     }
     return render(request, 'index.html', context)
+
+
+def profile(request):
+    levels = request.GET.get('LEVELS', '1')
+    shape = request.GET.get('FORM', 'круг')
+    topping = request.GET.get('TOPPING', '1')
+    berries = request.GET.get('BERRIES', '0')
+    decor = request.GET.get('DECOR', '0')
+    text = request.GET.get('WORDS', '')
+    comment = request.GET.get('COMMENTS', '')
+    name = request.GET.get('NAME', '')
+    phone = request.GET.get('PHONE', '')
+    email = request.GET.get('EMAIL', '')
+    address = request.GET.get('ADDRESS', '')
+    date = request.GET.get('DATE', '')
+    time = request.GET.get('TIME', '')
+
+    context = {
+        'vue_data': {
+            'Name': 'Ирина',
+            'Phone': '8 909 000-00-00',
+            'Email': 'nyam@gmail.com',
+        },
+        'cakes': [
+            {
+                'pk_order': '2239400223',
+                'name': 'Свадебный торт “VIP”',
+                'levels': '1',
+                'shape': 'круг',
+                'topping': 'белый соус',
+                'berries': 'нет',
+                'decor': 'нет',
+                'text': 'Без надписи',
+                'price_order': '1000',
+                'status_order': 'В доставке',
+                'time_order': '?',
+            },
+            {
+                'pk_order': '45575879537',
+                'name': 'Торт “Черепаха”',
+                'levels': '2',
+                'shape': 'квадрат',
+                'topping': 'белый соус',
+                'berries': 'нет',
+                'decor': 'безе',
+                'text': 'С днём рождения',
+                'price_order': '2550',
+                'status_order': 'Выполнен',
+                'time_order': '?',
+            },
+        ]
+    }
+    return render(request, 'lk-order.html', context)
