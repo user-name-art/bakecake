@@ -1,3 +1,17 @@
+function loadJSON(elementId){
+    let element = document.getElementById(elementId);
+
+    if (!element){
+      log.error(`Not found element with id '${elementId}'.`)
+      return null;
+    }
+
+    return JSON.parse(element.textContent);
+}
+
+let client_data = loadJSON('client_data');
+console.log('Load client data', client_data);
+
 Vue.createApp({
     components: {
         VForm: VeeValidate.Form,
@@ -7,9 +21,9 @@ Vue.createApp({
     data() {
         return {
             Edit: false,
-            Name: 'Ирина',
-            Phone: '8 909 000-00-00',
-            Email: 'nyam@gmail.com',
+            Name: client_data.Name,
+            Phone: client_data.Phone,
+            Email: client_data.Email,
             Schema: {
                 name_format: (value) => {
                     const regex = /^[a-zA-Zа-яА-я]+$/
