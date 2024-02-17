@@ -268,7 +268,7 @@
 			</section>
 
 			<section class="row pt-header" id="step4" v-if="Designed">
-				<form class="d-none" action="lk">
+				<form class="d-none" action="/lk-order/">
           {% for level in vue_data.DATA.Levels %}
           {% if not forloop.first %}
             <input v-model="Levels" value="{{ forloop.counter0 }}" type="radio" name="LEVELS">
@@ -440,5 +440,17 @@
 {{ vue_data|json_script:"cakes_data" }}
 <script src="{% static "/js/index.js" %}"></script>
 <script src="{% static "/js/registration.js" %}"></script>
+
+<!-- Виджет согласия с куки -->
+<script charset="utf-8" type="text/javascript" src="{% static "/js/agreement.js" %}"></script>
+<script charset="utf-8" type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function(){
+		getCookieNotification({
+			siteName:'BakeCake',
+			personalInformationLink:'/personal/',
+			color:'#5882cd'});});
+</script>
+<!-- Виджет согласия с куки -->
+
 </body>
 </html>
