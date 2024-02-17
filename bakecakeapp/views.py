@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserLoginForm
 from django.views import View
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def index(request):
@@ -97,7 +98,11 @@ class UserLoginView(View):
             mobile_number = form.cleaned_data['phone_number']
             password = form.cleaned_data['password']
             user = authenticate(username=mobile_number, password=password)
-            login(request, user)
+            if user is not None:
+                login(request, user)
+            else:
+                messages.error(request, 'Invalid login or password. Please, try again.')
+                return redirect('user_login')
 
         return render(request, 'index.html', {'phone_number': mobile_number})
 
