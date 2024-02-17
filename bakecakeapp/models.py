@@ -27,7 +27,6 @@ class Order(models.Model):
         null=True
     )
     cost = models.DecimalField('Стоимость', max_digits=7, decimal_places=2)
-    text = models.CharField('Надпись', max_length=60, blank=True)
     comment = models.TextField('Комментарий', blank=True)
 
     cakes = models.ManyToManyField(
@@ -55,8 +54,6 @@ class Order(models.Model):
 class Cake(models.Model):
     title = models.CharField('Наименование', max_length=50)
     cost = models.DecimalField('Стоимость', max_digits=7, decimal_places=2)
-
-    text = models.CharField('Надпись', max_length=60, blank=True)
     image = models.ImageField('Изображение', blank=True)
     description = models.TextField('Описание', blank=True)
 
