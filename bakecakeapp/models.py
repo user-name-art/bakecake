@@ -1,16 +1,27 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from phonenumber_field.modelfields import PhoneNumberField
+from .managers import CustomUserManager
 
 
-class User(models.Model):  # todo replace with custom user
-    name = models.CharField('Имя', max_length=50)
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    phone_number = PhoneNumberField('номер телефона', unique=True)
+    email = models.EmailField('электронная почта', unique=True, null=True, blank=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     def __str__(self):
-        return self.name
+        return str(self.phone_number)
 
 
 class Order(models.Model):
     user = models.ForeignKey(
-        'User',
+        'CustomUser',
         on_delete=models.CASCADE,
         related_name='orders',
         null=True

@@ -1,4 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from .forms import UserLoginForm
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def index(request):
@@ -28,6 +33,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+@login_required
 def profile(request):
     levels = request.GET.get('LEVELS', '1')
     shape = request.GET.get('FORM', 'круг')
@@ -79,3 +85,28 @@ def profile(request):
         ]
     }
     return render(request, 'lk-order.html', context)
+
+
+class UserLoginView(View):
+    def get(self, request):
+        form = UserLoginForm()
+        return render(request, 'login.html', {'form': form})
+
+    def post(self, request):
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            mobile_number = form.cleaned_data['phone_number']
+            password = form.cleaned_data['password']
+            user = authenticate(username=mobile_number, password=password)
+            if user is not None:
+                login(request, user)
+            else:
+                messages.error(request, 'Invalid login or password. Please, try again.')
+                return redirect('user_login')
+
+        return render(request, 'index.html', {'phone_number': mobile_number})
+
+
+def user_logout(request):
+    logout(request)
+    return render(request, 'index.html')

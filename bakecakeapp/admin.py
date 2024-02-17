@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from .models import User, Order, Cake, Composition, CompositionType
+from .models import CustomUser, Order, Cake, Composition, CompositionType
 
 
-@admin.register(User)
+@admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
     pass
 
