@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserLoginForm
 from django.views import View
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -31,6 +32,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+@login_required
 def profile(request):
     levels = request.GET.get('LEVELS', '1')
     shape = request.GET.get('FORM', 'круг')

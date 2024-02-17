@@ -23,7 +23,7 @@ from bakecakeapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('lk/', views.profile, name='profile'),
+    path('lk-order/', views.profile, name='profile'),
     path('login/', UserLoginView.as_view(), name='user_login'),
     path('logout/', views.user_logout, name='logout'),
 ]
