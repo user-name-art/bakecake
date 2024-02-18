@@ -5,6 +5,7 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    name = models.CharField('Имя клиента', max_length=50, null=True, blank=True)
     phone_number = PhoneNumberField('номер телефона', unique=True)
     email = models.EmailField('электронная почта', unique=True, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
