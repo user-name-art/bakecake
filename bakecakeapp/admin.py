@@ -10,6 +10,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'cost',)
     raw_id_fields = ('user', 'cakes', 'compositions',)
 
 
