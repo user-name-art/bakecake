@@ -5,29 +5,47 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from .models import Level, Berry, Shape, Topping, Decor, CustomCake, Order
 
 
 def index(request):
+    levels = Level.objects.all().order_by('cake_level')
+    shapes = Shape.objects.all().order_by('price')
+    berries = Berry.objects.all().order_by('price')
+    toppings = Topping.objects.all().order_by('price')
+    decors = Decor.objects.all().order_by('price')
+
+    all_levels = [level.cake_level for level in levels]
+    level_prices = [int(level.price) for level in levels]
+
+    all_shapes = [shape.shape_name for shape in shapes]
+    shape_prices = [int(shape.price) for shape in shapes]
+
+    all_berries = [berry.berry_name for berry in berries]
+    berry_prices = [int(berry.price) for berry in berries]
+
+    all_toppings = [topping.topping_name for topping in toppings]
+    topping_prices = [int(topping.price) for topping in toppings]
+
+    all_decors = [decor.decor_name for decor in decors]
+    decor_prices = [int(decor.price) for decor in decors]
+
     context = {
         'vue_data': {
             'costs': {
-                'Levels': [0, 400, 750, 1100],
-                'Forms': [0, 600, 400, 1000],
-                'Toppings': [0, 200, 180, 200, 300, 350, 200],
-                'Berries': [0, 400, 300, 450, 500],
-                'Decors': [0, 300, 400, 350, 300, 200, 280],
+                'Levels': level_prices,
+                'Forms': shape_prices,
+                'Toppings': topping_prices,
+                'Berries': berry_prices,
+                'Decors': decor_prices,
                 'Words': 500
             },
             'DATA': {
-                'Levels': ['не выбрано', '1', '2', '3'],
-                'Forms': ['не выбрано', 'Круг', 'Квадрат', 'Прямоугольник'],
-                'Toppings': ['не выбрано', 'Белый соус', 'Карамельный',
-                             'Кленовый', 'Черничный', 'Молочный шоколад',
-                             'Клубничный'],
-                'Berries': ['нет', 'Ежевика', 'Малина', 'Голубика',
-                            'Клубника'],
-                'Decors': ['нет', 'Фисташки', 'Безе', 'Фундук', 'Пекан',
-                           'Маршмеллоу', 'Марципан']
+                'Levels': all_levels,
+                'Forms': all_shapes,
+                'Toppings': all_toppings,
+                'Berries': all_berries,
+                'Decors': all_decors
             },
         }
     }
@@ -36,21 +54,64 @@ def index(request):
 
 @login_required
 def profile(request):
-    levels = request.GET.get('LEVELS', '1')
-    shape = request.GET.get('FORM', 'круг')
-    topping = request.GET.get('TOPPING', '1')
-    berries = request.GET.get('BERRIES', '0')
-    decor = request.GET.get('DECOR', '0')
-    text = request.GET.get('WORDS', '')
-    comment = request.GET.get('COMMENTS', '')
-    name = request.GET.get('NAME', '')
-    phone = request.GET.get('PHONE', '')
-    email = request.GET.get('EMAIL', '')
-    address = request.GET.get('ADDRESS', '')
-    date = request.GET.get('DATE', '')
-    time = request.GET.get('TIME', '')
-
     user = request.user
+
+    levels = Level.objects.all().order_by('cake_level')
+    shapes = Shape.objects.all().order_by('price')
+    berries = Berry.objects.all().order_by('price')
+    toppings = Topping.objects.all().order_by('price')
+    decors = Decor.objects.all().order_by('price')
+
+    all_levels = [level.cake_level for level in levels]
+    level_prices = [int(level.price) for level in levels]
+
+    all_shapes = [shape.shape_name for shape in shapes]
+    shape_prices = [int(shape.price) for shape in shapes]
+
+    all_berries = [berry.berry_name for berry in berries]
+    berry_prices = [int(berry.price) for berry in berries]
+
+    all_toppings = [topping.topping_name for topping in toppings]
+    topping_prices = [int(topping.price) for topping in toppings]
+
+    all_decors = [decor.decor_name for decor in decors]
+    decor_prices = [int(decor.price) for decor in decors]
+
+    if request.GET.get('LEVELS'):
+        selected_level = int(request.GET.get('LEVELS', ''))
+        selected_shape = int(request.GET.get('FORM', ''))
+        selected_topping = int(request.GET.get('TOPPING', ''))
+        selected_berries = int(request.GET.get('BERRIES', '0'))
+        selected_decor = int(request.GET.get('DECOR', '0'))
+        selected_text = request.GET.get('WORDS', '0')
+        selected_comment = request.GET.get('COMMENTS', '')
+        selected_address = request.GET.get('ADDRESS', '')
+        selected_date = request.GET.get('DATE', '')
+        selected_time = request.GET.get('TIME', '')
+
+        cake = CustomCake.objects.create(
+            level_count=levels.filter(cake_level=all_levels[selected_level])[0],
+            shape=shapes.filter(shape_name=all_shapes[selected_shape])[0],
+            topping=toppings.filter(topping_name=all_toppings[selected_topping])[0],
+            berry=berries.filter(berry_name=all_berries[selected_berries])[0],
+            decor=decors.filter(decor_name=all_decors[selected_decor])[0],
+            text=str(selected_text),
+
+        )
+        print(cake)
+
+        order_price = level_prices[selected_level] + shape_prices[selected_shape] + berry_prices[selected_berries] + topping_prices[selected_topping] + decor_prices[selected_decor]
+        if selected_text:
+            order_price += 500
+
+        order = Order.objects.create(
+            user=user,
+            cost=order_price,
+            comment=str(selected_comment),
+            custom_cake=cake,
+            address=str(selected_address),
+        )
+
     orders = user.orders.all().order_by('delivery_date')
     user_data = {
             'Name': user.name,
@@ -64,6 +125,12 @@ def profile(request):
             {
                 'pk_order': order.id,
                 'price_order': order.cost,
+                'levels': order.custom_cake.level_count,
+                'shape': order.custom_cake.shape,
+                'topping': order.custom_cake.topping,
+                'berries': order.custom_cake.berry,
+                'decor': order.custom_cake.decor,
+                'text': order.custom_cake.text,
                 'status_order': order.status,
                 'time_order': order.delivery_date,
             }
