@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from bakecakeapp.views import UserLoginView
+from bakecakeapp.views import UserLoginView, UserRegistrationView
 from bakecakeapp import views
 
 
@@ -26,4 +26,5 @@ urlpatterns = [
     path('lk-order/', views.profile, name='profile'),
     path('login/', UserLoginView.as_view(), name='user_login'),
     path('logout/', views.user_logout, name='logout'),
+    path('signup/', UserRegistrationView.as_view(), name='user_signup')
 ]

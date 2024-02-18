@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title %}User login{% endblock %}</title>
+    <title>{% block title %}User signup{% endblock %}</title>
     <!-- Include necessary CSS files and stylesheets -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -24,7 +24,7 @@
     <!-- Page content -->
     <div class="container mt-4">
         {% block content %}
-        <h2>User Login</h2>
+        <h2>User Registration</h2>
         {% if messages %}
           {% for message in messages %}
             <div class="alert alert-danger">{{ message }}</div>
@@ -33,7 +33,7 @@
         <form method="post">
           {% csrf_token %}
           {{ form.as_p }}
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary">Registration</button>
         </form>
       {% endblock %}
     </div>
