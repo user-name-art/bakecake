@@ -50,40 +50,28 @@ def profile(request):
     date = request.GET.get('DATE', '')
     time = request.GET.get('TIME', '')
 
+    user = request.user
+    orders = user.orders.all().order_by('delivery_date')
+    user_data = {
+            'Name': user.name,
+            'Phone': str(user.phone_number),
+            'Email': user.email,
+        }
+
+    order_list = []
+    for order in orders:
+        order_list.append(
+            {
+                'pk_order': order.id,
+                'price_order': order.cost,
+                'status_order': order.status,
+                'time_order': order.delivery_date,
+            }
+        )
+
     context = {
-        'vue_data': {
-            'Name': 'Ирина',
-            'Phone': '8 909 000-00-00',
-            'Email': 'nyam@gmail.com',
-        },
-        'cakes': [
-            {
-                'pk_order': '2239400223',
-                'name': 'Свадебный торт “VIP”',
-                'levels': '1',
-                'shape': 'круг',
-                'topping': 'белый соус',
-                'berries': 'нет',
-                'decor': 'нет',
-                'text': 'Без надписи',
-                'price_order': '1000',
-                'status_order': 'В доставке',
-                'time_order': '?',
-            },
-            {
-                'pk_order': '45575879537',
-                'name': 'Торт “Черепаха”',
-                'levels': '2',
-                'shape': 'квадрат',
-                'topping': 'белый соус',
-                'berries': 'нет',
-                'decor': 'безе',
-                'text': 'С днём рождения',
-                'price_order': '2550',
-                'status_order': 'Выполнен',
-                'time_order': '?',
-            },
-        ]
+        'vue_data': user_data,
+        'cakes': order_list,
     }
     return render(request, 'lk-order.html', context)
 

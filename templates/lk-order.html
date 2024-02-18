@@ -42,16 +42,8 @@
 					<small class="fw-lighter text-decoration-none fs_12 cake_blue">Пн - Вс 10:00—20:00</small>
 				</li>
 				<li class="nav-item d-flex align-items-center">
-					<a class="nav-link fw-lighter me-1 cake_blue position-relative" href="#">
-						<img src="{% static "img/shopping-cart.svg" %}"  alt="">
-						<span class="position-absolute translate-middle badge rounded-pill cake__bg_pink fs_8">1</span>
-					</a>
-					<a class="nav-link fw-lighter me-1 cake_blue position-relative" href="#">
-						<img src="{% static "img/user.svg" %}"  alt="">
-						<span class="position-absolute translate-middle badge rounded-pill cake__bg_pink fs_8">1</span>
-					</a>
 					<a class="nav-link fw-lighter cake_grey fs_12" href="#">
-						Ирина
+						{{ user.name }}
 					</a>
 				</li>
 			</ul>
