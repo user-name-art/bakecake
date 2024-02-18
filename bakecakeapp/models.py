@@ -49,8 +49,7 @@ class Order(models.Model):
     status = models.BooleanField('Статус заказа', default=True)
 
     def __str__(self):
-        return self.user.name
-
+        return str(self.user.phone_number)
 
 class Cake(models.Model):
     title = models.CharField('Наименование', max_length=50)
