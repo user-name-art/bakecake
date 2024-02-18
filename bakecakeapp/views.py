@@ -121,10 +121,14 @@ class UserRegistrationView(View):
             password2 = form.cleaned_data['password2']
             if password1 == password2:
                 User = get_user_model()
-                user = User.objects.create(phone_number=phone_number)
-                user.set_password(password1)
-                user.save()
-                return redirect('user_login')
+                user, created = User.objects.get_or_create(phone_number=phone_number)
+                if created:
+                    user.set_password(password1)
+                    user.save()
+                    return redirect('user_login')
+                else:
+                    messages.error(request, 'User with this phone number is already registered.')
+                    return redirect('user_signup')
             else:
                 messages.error(request, 'Password mismatch. Please try again.')
                 return redirect('user_signup')
