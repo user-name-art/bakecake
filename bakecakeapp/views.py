@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
@@ -120,6 +121,7 @@ def profile(request):
             comment=str(selected_comment),
             custom_cake=cake,
             address=str(selected_address),
+            delivery_date=datetime.fromisoformat(f'{selected_date} {selected_time}')
         )
 
     orders = user.orders.all().order_by('delivery_date')
