@@ -25,7 +25,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('lk-order/', views.profile, name='profile'),
     path('login/', UserLoginView.as_view(), name='user_login'),
-    path('accounts/login/', UserLoginView.as_view(), name='user_login'),
     path('logout/', views.user_logout, name='logout'),
     path('signup/', UserRegistrationView.as_view(), name='user_signup')
 ]

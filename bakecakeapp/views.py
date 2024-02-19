@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from .forms import UserLoginForm, UserRegistrationForm
-from django.views import View
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import get_user_model
-from .models import Level, Berry, Shape, Topping, Decor, CustomCake, Order
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from django.views import View
+
+from .forms import UserLoginForm, UserRegistrationForm
+from .models import (Berry, CustomCake, CustomUser, Decor, Level, Order, Shape,
+                     Topping)
 
 
 def index(request):
@@ -52,9 +53,9 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-@login_required
+#@login_required(login_url='user_login')
 def profile(request):
-    user = request.user
+    #user = request.user
 
     levels = Level.objects.all().order_by('cake_level')
     shapes = Shape.objects.all().order_by('price')
@@ -89,6 +90,10 @@ def profile(request):
         selected_date = request.GET.get('DATE', '')
         selected_time = request.GET.get('TIME', '')
 
+        username = request.GET.get('NAME', '')
+        userphone = request.GET.get('PHONE')
+        useremail = request.GET.get('EMAIL', '')
+
         cake = CustomCake.objects.create(
             level_count=levels.filter(cake_level=all_levels[selected_level])[0],
             shape=shapes.filter(shape_name=all_shapes[selected_shape])[0],
@@ -96,13 +101,18 @@ def profile(request):
             berry=berries.filter(berry_name=all_berries[selected_berries])[0],
             decor=decors.filter(decor_name=all_decors[selected_decor])[0],
             text=str(selected_text),
-
         )
         print(cake)
 
         order_price = level_prices[selected_level] + shape_prices[selected_shape] + berry_prices[selected_berries] + topping_prices[selected_topping] + decor_prices[selected_decor]
         if selected_text:
             order_price += 500
+
+        user, _ = CustomUser.objects.get_or_create(
+            name=username,
+            phone_number=userphone,
+            email=useremail,
+        )
 
         order = Order.objects.create(
             user=user,
